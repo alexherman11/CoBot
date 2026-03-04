@@ -58,7 +58,6 @@ ${apiDocs}`;
         { role: 'system', content: this.systemPrompt },
         ...messages
       ],
-      temperature: 0.3,
       max_completion_tokens: 1024
     });
 
@@ -75,7 +74,6 @@ ${apiDocs}`;
         { role: 'system', content: this.systemPrompt },
         ...messages
       ],
-      temperature: 0.3,
       max_completion_tokens: 1024,
       stream: true
     });
