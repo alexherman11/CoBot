@@ -59,7 +59,7 @@ ${apiDocs}`;
         ...messages
       ],
       temperature: 0.3,
-      max_tokens: 1024
+      max_completion_tokens: 1024
     });
 
     return {
@@ -76,7 +76,7 @@ ${apiDocs}`;
         ...messages
       ],
       temperature: 0.3,
-      max_tokens: 1024,
+      max_completion_tokens: 1024,
       stream: true
     });
 
