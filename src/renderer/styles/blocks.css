@@ -1,0 +1,240 @@
+/* === Block Palette (left sidebar within blocks mode) === */
+#blocks-mode {
+  display: flex;
+  flex-direction: row;
+}
+
+#blocks-mode.active {
+  display: flex;
+  flex-direction: row;
+}
+
+#block-palette {
+  width: 180px;
+  min-width: 180px;
+  background: #f0f3f7;
+  border-right: 1px solid var(--border);
+  padding: 8px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.palette-header {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 4px 4px 2px;
+  letter-spacing: 0.5px;
+}
+
+.palette-block {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: grab;
+  color: white;
+  user-select: none;
+  transition: transform 0.1s, box-shadow 0.1s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.palette-block:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+}
+
+.palette-block:active {
+  cursor: grabbing;
+  transform: scale(0.97);
+}
+
+.palette-block .block-icon {
+  font-size: 16px;
+  width: 22px;
+  text-align: center;
+}
+
+/* Block type colors */
+.block-color-start     { background: #7c3aed; }
+.block-color-forward   { background: #2563eb; }
+.block-color-backward  { background: #0891b2; }
+.block-color-turn      { background: #d97706; }
+.block-color-repeat    { background: #059669; }
+.block-color-while     { background: #dc2626; }
+
+/* === Block Workspace (drop area) === */
+#block-workspace {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  background: white;
+  position: relative;
+}
+
+#workspace-drop-zone {
+  flex: 1;
+  padding: 12px;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.workspace-hint {
+  color: var(--text-muted);
+  font-size: 16px;
+  text-align: center;
+  padding: 40px 20px;
+  pointer-events: none;
+}
+
+/* Workspace blocks */
+.workspace-block {
+  display: flex;
+  flex-direction: column;
+  border-radius: 6px;
+  margin: 2px 0;
+  user-select: none;
+  position: relative;
+}
+
+.block-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: grab;
+  min-height: 40px;
+}
+
+.block-header:active {
+  cursor: grabbing;
+}
+
+.block-param {
+  background: rgba(255,255,255,0.25);
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 13px;
+  color: white;
+  width: 60px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.block-param::placeholder {
+  color: rgba(255,255,255,0.6);
+}
+
+.block-param-select {
+  background: rgba(255,255,255,0.25);
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 13px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.block-param-select option {
+  color: #333;
+  background: white;
+}
+
+/* Container blocks (Repeat / While) */
+.block-children {
+  margin-left: 20px;
+  border-left: 3px solid rgba(255,255,255,0.3);
+  padding: 4px 0 4px 8px;
+  min-height: 40px;
+  background: rgba(0,0,0,0.05);
+  border-radius: 0 0 6px 6px;
+}
+
+.block-children.drag-over {
+  background: rgba(52, 152, 219, 0.15);
+  border-left-color: var(--accent);
+}
+
+.block-footer {
+  padding: 3px 12px;
+  border-radius: 0 0 6px 6px;
+  color: rgba(255,255,255,0.8);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Drop indicator */
+.drop-indicator {
+  height: 3px;
+  background: var(--accent);
+  border-radius: 2px;
+  margin: 1px 0;
+  pointer-events: none;
+  animation: pulse 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  from { opacity: 0.5; }
+  to { opacity: 1; }
+}
+
+/* Drag over state */
+#workspace-drop-zone.drag-over {
+  background: rgba(52, 152, 219, 0.05);
+}
+
+/* Trash zone */
+#trash-zone {
+  padding: 10px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13px;
+  border-top: 1px dashed var(--border);
+  transition: all 0.2s;
+}
+
+#trash-zone.drag-over {
+  background: #fde8e8;
+  color: var(--accent-red);
+  border-top-color: var(--accent-red);
+}
+
+/* Block delete button */
+.block-delete {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.6);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0 4px;
+  margin-left: auto;
+  transition: color 0.2s;
+}
+
+.block-delete:hover {
+  color: white;
+}
+
+/* Children placeholder text */
+.children-hint {
+  color: var(--text-muted);
+  font-size: 12px;
+  padding: 8px;
+  text-align: center;
+  font-style: italic;
+}

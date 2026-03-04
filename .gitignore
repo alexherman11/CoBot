@@ -1,0 +1,10 @@
+node_modules/
+dist/
+build/
+*.exe.bak
+OPENAI_API_KEY.txt
+.env
+*.log
+.DS_Store
+Thumbs.db
+.claude/

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' file:; style-src 'self' 'unsafe-inline' file:; script-src 'self' 'unsafe-eval' file: data:; font-src 'self' data: file:; img-src 'self' data:; worker-src 'self' blob: data:;">
+  <title>CoBot - VEX Robot Coder</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/blocks.css">
+  <link rel="stylesheet" href="styles/chat.css">
+</head>
+<body>
+  <!-- Toolbar -->
+  <div id="toolbar">
+    <div class="toolbar-left">
+      <span class="app-title">CoBot</span>
+      <span class="app-subtitle">VEX Robot Coder</span>
+    </div>
+    <div class="toolbar-center">
+      <div class="slot-selector">
+        <label for="slot-select">Slot:</label>
+        <select id="slot-select">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+        </select>
+      </div>
+      <button id="upload-btn" class="btn-upload" disabled>
+        <span class="upload-icon">&#9654;</span> Upload &amp; Run
+      </button>
+    </div>
+    <div class="toolbar-right">
+      <div id="robot-status" class="status-disconnected">
+        <span class="status-dot"></span>
+        <span class="status-text">No robot found</span>
+      </div>
+      <button id="settings-btn" class="btn-icon" title="Settings">&#9881;</button>
+    </div>
+  </div>
+
+  <!-- Main Content Area -->
+  <div id="main-content">
+    <!-- Left Panel -->
+    <div id="left-panel">
+      <!-- Mode Switcher Tabs -->
+      <div id="mode-tabs">
+        <button class="mode-tab active" data-mode="blocks">Blocks</button>
+        <button class="mode-tab" data-mode="chat">AI Chat</button>
+      </div>
+
+      <!-- Blocks Mode -->
+      <div id="blocks-mode" class="mode-content active">
+        <div id="block-palette"></div>
+        <div id="block-workspace">
+          <div id="workspace-drop-zone">
+            <p class="workspace-hint">Drag blocks here to start coding!</p>
+          </div>
+          <div id="trash-zone">
+            <span>&#128465; Drop here to delete</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat Mode -->
+      <div id="chat-mode" class="mode-content">
+        <div id="chat-messages"></div>
+        <div id="chat-input-area">
+          <textarea id="chat-input" placeholder="Tell me what you want your robot to do..." rows="2"></textarea>
+          <button id="chat-send-btn" class="btn-send">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resizable Divider -->
+    <div id="divider"></div>
+
+    <!-- Right Panel - Code Editor -->
+    <div id="right-panel">
+      <div id="editor-header">
+        <span>Python Code</span>
+        <button id="copy-code-btn" class="btn-small" title="Copy code">Copy</button>
+      </div>
+      <div id="monaco-editor"></div>
+    </div>
+  </div>
+
+  <!-- Status Bar -->
+  <div id="status-bar">
+    <span id="status-message">Ready</span>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="settings-modal" class="modal hidden">
+    <div class="modal-content">
+      <h2>Settings</h2>
+      <div class="form-group">
+        <label for="api-key-input">OpenAI API Key:</label>
+        <input type="password" id="api-key-input" placeholder="sk-..." />
+      </div>
+      <div class="modal-buttons">
+        <button id="save-settings-btn" class="btn-primary">Save</button>
+        <button id="cancel-settings-btn" class="btn-secondary">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="components/split-pane.js"></script>
+  <script src="components/mode-switcher.js"></script>
+  <script src="components/toolbar.js"></script>
+  <script src="blocks/block-definitions.js"></script>
+  <script src="blocks/block-renderer.js"></script>
+  <script src="blocks/block-drag.js"></script>
+  <script src="blocks/block-workspace.js"></script>
+  <script src="blocks/block-palette.js"></script>
+  <script src="blocks/block-compiler.js"></script>
+  <script src="chat/chat-panel.js"></script>
+  <script src="chat/chat-controller.js"></script>
+  <script src="editor/code-editor.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

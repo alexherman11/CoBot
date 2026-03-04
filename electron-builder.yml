@@ -1,0 +1,33 @@
+appId: com.cobot.vexcoder
+productName: CoBot
+directories:
+  output: dist
+
+files:
+  - src/**/*
+  - node_modules/**/*
+  - package.json
+
+# Unpack Monaco (dynamic script loading) and serialport (native module) from asar
+asarUnpack:
+  - node_modules/monaco-editor/**
+  - node_modules/serialport/**
+  - node_modules/@serialport/**
+
+extraResources:
+  - from: resources/
+    to: .
+    filter:
+      - "**/*"
+
+win:
+  target: nsis
+
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+
+mac:
+  target: dmg
+  category: public.app-category.education
+  identity: null
