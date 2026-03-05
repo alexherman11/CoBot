@@ -77,6 +77,11 @@ class VexcomService {
         args.push(this.connectedPort);
       }
 
+      // Ensure execute permission on macOS/Linux
+      if (process.platform !== 'win32') {
+        try { fs.chmodSync(vexcomPath, 0o755); } catch {}
+      }
+
       const proc = spawn(vexcomPath, args);
       let stdout = '';
       let stderr = '';
