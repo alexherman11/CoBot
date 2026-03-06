@@ -1,0 +1,469 @@
+VEX IQ 2nd Gen Python API Reference (Driving, Motors, Controller, Sound)
+============================================================
+
+# General Utilities
+============================================================
+
+wait(duration, units)
+  Pauses execution for the specified duration.
+  Parameters:
+    duration - Time to wait as a number.
+    units    - SECONDS or MSEC
+  Example:
+    wait(1, SECONDS)
+    wait(100, MSEC)
+
+print(string, end)
+  Prints text to the console.
+  Parameters:
+    string - The text to print.
+    end    - Optional. String appended to end. Default: end="\n"
+  Example:
+    print("Hello!")
+    print("no newline", end="")
+
+# Drivetrain
+============================================================
+
+The Drivetrain controls a robot's movement: driving forward/reverse
+and turning left/right. The configured drivetrain is named "drivetrain".
+
+## Actions
+
+drive(direction, velocity, units)
+  Moves the drivetrain in a direction indefinitely (until stop is called).
+  Parameters:
+    direction - FORWARD or REVERSE
+    velocity  - Optional. Speed as float/int. Default: 50%.
+    units     - Optional. PERCENT, RPM, or VelocityUnits.DPS
+  Example:
+    drivetrain.drive(FORWARD)
+    wait(2, SECONDS)
+    drivetrain.stop()
+
+    drivetrain.drive(REVERSE, 20, PERCENT)
+    wait(2, SECONDS)
+    drivetrain.stop()
+
+drive_for(direction, distance, units, velocity, velocity_units)
+  Moves the drivetrain for a set distance, then stops.
+  Parameters:
+    direction      - FORWARD or REVERSE
+    distance       - Distance as float/int.
+    units          - MM, INCHES, or TURNS
+    velocity       - Optional. Speed as float/int.
+    velocity_units - Optional. PERCENT, RPM, or VelocityUnits.DPS
+  Example:
+    drivetrain.drive_for(FORWARD, 200, MM)
+    drivetrain.drive_for(REVERSE, 6, INCHES, 30, PERCENT)
+
+turn(direction, velocity, units)
+  Turns the drivetrain left or right indefinitely (until stop is called).
+  Parameters:
+    direction - LEFT or RIGHT
+    velocity  - Optional. Speed as float/int. Default: 50%.
+    units     - Optional. PERCENT, RPM, or VelocityUnits.DPS
+  Example:
+    drivetrain.turn(RIGHT)
+    wait(1, SECONDS)
+    drivetrain.stop()
+
+turn_for(direction, angle, units, velocity, velocity_units)
+  Turns the drivetrain for a set angle, then stops.
+  Parameters:
+    direction      - LEFT or RIGHT
+    angle          - Angle as float/int.
+    units          - DEGREES or TURNS
+    velocity       - Optional. Speed as float/int.
+    velocity_units - Optional. PERCENT, RPM, or VelocityUnits.DPS
+  Example:
+    drivetrain.turn_for(RIGHT, 90, DEGREES)
+    drivetrain.turn_for(LEFT, 180, DEGREES, 25, PERCENT)
+
+stop()
+  Stops the drivetrain using the current stopping mode.
+  Example:
+    drivetrain.stop()
+
+## Mutators
+
+set_drive_velocity(velocity, units)
+  Sets the default drive velocity.
+  Parameters:
+    velocity - Speed as float/int.
+    units    - Optional. PERCENT (default), RPM, or VelocityUnits.DPS
+  Example:
+    drivetrain.set_drive_velocity(50, PERCENT)
+
+set_turn_velocity(velocity, units)
+  Sets the default turn velocity.
+  Parameters:
+    velocity - Speed as float/int.
+    units    - Optional. PERCENT (default), RPM, or VelocityUnits.DPS
+  Example:
+    drivetrain.set_turn_velocity(25, PERCENT)
+
+set_stopping(mode)
+  Sets the stopping behavior.
+  Parameters:
+    mode - BRAKE (default), COAST, or HOLD
+  Example:
+    drivetrain.set_stopping(BRAKE)
+
+set_timeout(timeout, units)
+  Sets how long drive_for/turn_for will wait before giving up if blocked.
+  Parameters:
+    timeout - Time as float/int.
+    units   - SECONDS or MSEC
+  Example:
+    drivetrain.set_timeout(3, SECONDS)
+
+## Getters
+
+velocity(units)
+  Returns the drivetrain's current velocity.
+  Parameters:
+    units - Optional. PERCENT (default), RPM, or VelocityUnits.DPS
+  Example:
+    speed = drivetrain.velocity(PERCENT)
+
+is_moving()
+  Returns True if the drivetrain is currently moving.
+  Example:
+    if drivetrain.is_moving():
+        print("Moving!")
+
+is_done()
+  Returns True if the drivetrain is NOT currently moving.
+  Example:
+    drivetrain.drive_for(FORWARD, 200, MM, wait=False)
+    while not drivetrain.is_done():
+        wait(10, MSEC)
+
+## Constructor
+
+DriveTrain(left_motor, right_motor, wheel_travel, track_width, units, gear_ratio)
+  Creates a basic drivetrain.
+  Parameters:
+    left_motor   - A Motor or MotorGroup for the left side.
+    right_motor  - A Motor or MotorGroup for the right side.
+    wheel_travel - Optional. Circumference of the wheel in mm. Default: 200mm.
+    track_width  - Optional. Distance between wheels in mm. Default: 176mm.
+    units        - Optional. MM or INCHES. Default: MM.
+    gear_ratio   - Optional. External gear ratio as float. Default: 1.0.
+  Example:
+    left_motor = Motor(Ports.PORT1, True)
+    right_motor = Motor(Ports.PORT6)
+    drivetrain = DriveTrain(left_motor, right_motor, 200, 176, MM, 1)
+
+
+# Motor
+============================================================
+
+Individual motors for mechanisms (arms, claws, etc.).
+The configured motor is named "motor_1".
+
+## Actions
+
+spin(direction, velocity, units)
+  Spins a motor indefinitely.
+  Parameters:
+    direction - FORWARD or REVERSE
+    velocity  - Optional. Speed as float/int. Default: set_velocity value.
+    units     - Optional. PERCENT, RPM, or VelocityUnits.DPS
+  Example:
+    motor_1.spin(FORWARD)
+    motor_1.spin(REVERSE, 50, PERCENT)
+
+spin_for(direction, amount, units, velocity, velocity_units, wait)
+  Spins a motor for a specified distance, then stops.
+  Parameters:
+    direction      - FORWARD or REVERSE
+    amount         - Distance as float/int.
+    units          - DEGREES or TURNS
+    velocity       - Optional. Speed as float/int.
+    velocity_units - Optional. PERCENT, RPM, or VelocityUnits.DPS
+    wait           - Optional. True (default) = blocking, False = non-blocking.
+  Example:
+    motor_1.spin_for(FORWARD, 360, DEGREES)
+    motor_1.spin_for(REVERSE, 2, TURNS, 75, PERCENT)
+
+spin_to_position(position, units, velocity, velocity_units, wait)
+  Spins a motor to an absolute position.
+  Parameters:
+    position       - Target position as float/int.
+    units          - DEGREES or TURNS
+    velocity       - Optional. Speed as float/int.
+    velocity_units - Optional. PERCENT, RPM, or VelocityUnits.DPS
+    wait           - Optional. True (default) = blocking, False = non-blocking.
+  Example:
+    motor_1.spin_to_position(90, DEGREES)
+
+stop()
+  Stops the motor using the current stopping mode.
+  Example:
+    motor_1.stop()
+
+## Mutators
+
+set_velocity(velocity, units)
+  Sets the default velocity for the motor.
+  Parameters:
+    velocity - Speed as float/int.
+    units    - Optional. PERCENT (default), RPM, or VelocityUnits.DPS
+  Example:
+    motor_1.set_velocity(50, PERCENT)
+
+set_max_torque(torque, units)
+  Sets the maximum torque for the motor.
+  Parameters:
+    torque - Torque as float/int.
+    units  - Optional. PERCENT, NM (Newton Meters), or InchPounds
+  Example:
+    motor_1.set_max_torque(50, PERCENT)
+
+set_stopping(mode)
+  Sets the stop behavior.
+  Parameters:
+    mode - BRAKE (default), COAST, or HOLD
+  Example:
+    motor_1.set_stopping(HOLD)
+
+set_timeout(timeout, units)
+  Sets how long spin_for/spin_to_position waits before giving up if blocked.
+  Parameters:
+    timeout - Time as float/int.
+    units   - SECONDS or MSEC
+  Example:
+    motor_1.set_timeout(2, SECONDS)
+
+set_reversed(reversed)
+  Reverses the motor's direction.
+  Parameters:
+    reversed - True or False
+  Example:
+    motor_1.set_reversed(True)
+
+set_position(position, units)
+  Sets the motor's encoder position to a specific value.
+  Parameters:
+    position - Position as float/int.
+    units    - DEGREES or TURNS
+  Example:
+    motor_1.set_position(0, DEGREES)
+
+reset_position()
+  Sets the motor's position to 0.
+  Example:
+    motor_1.reset_position()
+
+## Getters
+
+position(units)
+  Returns the motor's current position.
+  Parameters:
+    units - Optional. DEGREES (default) or TURNS
+  Example:
+    pos = motor_1.position(DEGREES)
+
+velocity(units)
+  Returns the motor's current velocity.
+  Parameters:
+    units - Optional. PERCENT (default), RPM, or VelocityUnits.DPS
+  Example:
+    speed = motor_1.velocity(PERCENT)
+
+is_spinning()
+  Returns True if the motor is currently spinning.
+
+is_done()
+  Returns True if the motor is NOT currently spinning.
+
+direction()
+  Returns the current spin direction of the motor (FORWARD or REVERSE).
+
+## Constructor
+
+Motor(port, reversed)
+  Creates a motor.
+  Parameters:
+    port     - Smart Port: Ports.PORT1 through Ports.PORT12
+    reversed - Optional. True reverses the default direction. Default: False.
+  Example:
+    motor_1 = Motor(Ports.PORT1)
+    motor_2 = Motor(Ports.PORT6, True)
+
+MotorGroup(motor1, motor2, ...)
+  Creates a motor group from multiple motors. Supports all Motor methods.
+  Parameters:
+    motor1, motor2, ... - Two or more Motor objects.
+  Example:
+    motor_group_1 = MotorGroup(motor_1, motor_2)
+    motor_group_1.spin(FORWARD, 50, PERCENT)
+
+
+# Controller
+============================================================
+
+The IQ Brain connects to an IQ Controller with two analog joysticks
+and multiple buttons.
+
+## Actions
+
+remote_control_code_enabled
+  Variable (True/False) that enables or disables Controller-configured
+  actions from the Devices menu. Enabled (True) by default.
+  Example:
+    remote_control_code_enabled = False
+
+## Getters
+
+.pressing()
+  Returns 1 if a button is being pressed, 0 if not.
+  Must be called on a specific button object:
+    controller.buttonEDown.pressing()   - E Down button
+    controller.buttonEUp.pressing()     - E Up button
+    controller.buttonFDown.pressing()   - F Down button
+    controller.buttonFUp.pressing()     - F Up button
+    controller.buttonLDown.pressing()   - L Down button
+    controller.buttonLUp.pressing()     - L Up button
+    controller.buttonRDown.pressing()   - R Down button
+    controller.buttonRUp.pressing()     - R Up button
+    controller.buttonL3.pressing()      - Left Joystick button (2nd gen only)
+    controller.buttonR3.pressing()      - Right Joystick button (2nd gen only)
+  Example:
+    if controller.buttonEUp.pressing():
+        motor_1.spin(FORWARD)
+
+.position()
+  Returns the joystick axis position as a value from -100 to 100.
+  Must be called on a specific axis object:
+    controller.axisA.position()  - Left joystick vertical (up=positive)
+    controller.axisB.position()  - Left joystick horizontal (right=positive)
+    controller.axisC.position()  - Right joystick horizontal (right=positive)
+    controller.axisD.position()  - Right joystick vertical (up=positive)
+  Example:
+    speed = controller.axisA.position()
+    if speed > 5:
+        drivetrain.drive(FORWARD, speed, PERCENT)
+
+## Callbacks
+
+.pressed(callback, arg)
+  Calls a function when a button is pressed.
+  Parameters:
+    callback - Function to call.
+    arg      - Optional. Tuple of arguments to pass.
+  Example:
+    def on_e_up():
+        motor_1.spin(FORWARD)
+    controller.buttonEUp.pressed(on_e_up)
+
+.released(callback, arg)
+  Calls a function when a button is released.
+  Example:
+    def on_e_up_release():
+        motor_1.stop()
+    controller.buttonEUp.released(on_e_up_release)
+
+.changed(callback, arg)
+  Calls a function when a joystick axis value changes.
+  Must be called on a specific axis object.
+  Example:
+    def on_axis_change():
+        speed = controller.axisA.position()
+        drivetrain.drive(FORWARD, speed, PERCENT)
+    controller.axisA.changed(on_axis_change)
+
+## Constructor
+
+Controller()
+  Creates a controller object.
+  Example:
+    controller = Controller()
+
+
+# Sound
+============================================================
+
+The Brain has a built-in speaker for sound effects and musical notes.
+
+## Actions
+
+play_sound(sound)
+  Plays a built-in sound from the Brain.
+  Parameters:
+    sound - One of the following:
+      SoundType.ALARM
+      SoundType.ALARM2
+      SoundType.DOOR_CLOSE
+      SoundType.FILLUP
+      SoundType.HEADLIGHTS_OFF
+      SoundType.HEADLIGHTS_ON
+      SoundType.POWER_DOWN
+      SoundType.RATCHET
+      SoundType.RATCHET2
+      SoundType.SIREN
+      SoundType.SIREN2
+      SoundType.TADA
+      SoundType.TOLLBOOTH
+      SoundType.WRENCH
+      SoundType.WRONG_WAY
+      SoundType.WRONG_WAY_SLOW
+  Example:
+    brain.play_sound(SoundType.TADA)
+
+play_note(octave, note, duration)
+  Plays a musical note.
+  Parameters:
+    octave   - 3 (low) or 4 (high)
+    note     - 0=C, 1=D, 2=E, 3=F, 4=G, 5=A, 6=B
+    duration - Optional. Duration in ms, max 500. Default: 500.
+  Example:
+    brain.play_note(4, 0, 250)
+    brain.play_note(4, 3, 500)
+
+sound_off()
+  Stops the currently playing sound.
+  Example:
+    brain.play_sound(SoundType.POWER_DOWN)
+    wait(0.2, SECONDS)
+    brain.sound_off()
+
+
+# Common Patterns
+============================================================
+
+## Tank Drive (two-joystick control)
+  remote_control_code_enabled = False
+  while True:
+      left_speed = controller.axisA.position()
+      right_speed = controller.axisD.position()
+      left_motor.spin(FORWARD, left_speed, PERCENT)
+      right_motor.spin(FORWARD, right_speed, PERCENT)
+      wait(20, MSEC)
+
+## Arcade Drive (one-joystick control)
+  remote_control_code_enabled = False
+  while True:
+      forward = controller.axisA.position()
+      turn = controller.axisB.position()
+      left_motor.spin(FORWARD, forward + turn, PERCENT)
+      right_motor.spin(FORWARD, forward - turn, PERCENT)
+      wait(20, MSEC)
+
+## Button-controlled mechanism
+  def arm_up():
+      motor_1.spin(FORWARD, 50, PERCENT)
+
+  def arm_stop():
+      motor_1.stop()
+
+  controller.buttonEUp.pressed(arm_up)
+  controller.buttonEUp.released(arm_stop)
+
+## Simple autonomous drive
+  drivetrain.drive_for(FORWARD, 300, MM)
+  drivetrain.turn_for(RIGHT, 90, DEGREES)
+  drivetrain.drive_for(FORWARD, 300, MM)
+  drivetrain.stop()
