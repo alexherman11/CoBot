@@ -24,7 +24,13 @@ contextBridge.exposeInMainWorld('api', {
   // Streaming chat - returns chunks via callback
   streamChatMessage: (messages, callback) => {
     const channel = `chat-stream-${Date.now()}`;
-    ipcRenderer.on(channel, (_event, chunk) => callback(chunk));
+    const listener = (_event, chunk) => {
+      callback(chunk);
+      if (chunk.done) {
+        ipcRenderer.removeListener(channel, listener);
+      }
+    };
+    ipcRenderer.on(channel, listener);
     return ipcRenderer.invoke('stream-chat-message', messages, channel);
   },
 

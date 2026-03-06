@@ -67,12 +67,12 @@ class VexcomService {
       const vexcomPath = this.getVexcomPath();
 
       if (!fs.existsSync(vexcomPath)) {
-        reject(new Error("Can't find vexcom. Make sure it's in the project folder."));
+        reject(new Error(`Can't find vexcom at: ${vexcomPath}`));
         return;
       }
 
       // Build vexcom command args
-      const args = ['--python', '--slot', String(slot), '--write', tmpFile, '--run'];
+      const args = ['--slot', String(slot), '--write', tmpFile, '--run'];
       if (this.connectedPort) {
         args.push(this.connectedPort);
       }
@@ -82,6 +82,7 @@ class VexcomService {
         try { fs.chmodSync(vexcomPath, 0o755); } catch {}
       }
 
+      console.log('[vexcom] spawning:', vexcomPath, args.join(' '));
       const proc = spawn(vexcomPath, args);
       let stdout = '';
       let stderr = '';
@@ -109,7 +110,8 @@ class VexcomService {
       });
 
       proc.on('error', (err) => {
-        reject(new Error(`Failed to run vexcom: ${err.message}`));
+        const stats = fs.statSync(vexcomPath);
+        reject(new Error(`Failed to run vexcom: ${err.message}\nPath: ${vexcomPath}\nSize: ${stats.size}\nMode: ${stats.mode.toString(8)}\nPlatform: ${process.platform}`));
       });
 
       // Timeout after 30 seconds

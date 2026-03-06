@@ -55,6 +55,16 @@ const CodeEditor = {
 
     // Expose globally
     window.codeEditor = this.editor;
+    window.aiCodeActive = false;
+    window._blockCompilerUpdating = false;
+    window._aiCodeLoading = false;
+
+    // Clear aiCodeActive when user manually edits (not programmatic setValue)
+    this.editor.onDidChangeModelContent(() => {
+      if (!window._blockCompilerUpdating && !window._aiCodeLoading) {
+        window.aiCodeActive = false;
+      }
+    });
 
     // Now that Monaco is ready, recompile blocks to populate the editor
     if (typeof BlockCompiler !== 'undefined') {

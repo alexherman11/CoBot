@@ -11,6 +11,9 @@ const Toolbar = {
     document.getElementById('save-settings-btn').addEventListener('click', () => this.saveSettings());
     document.getElementById('cancel-settings-btn').addEventListener('click', () => this.hideSettings());
 
+    // Undo button
+    document.getElementById('undo-code-btn').addEventListener('click', () => this.undoCode());
+
     // Copy code button
     document.getElementById('copy-code-btn').addEventListener('click', () => this.copyCode());
 
@@ -68,6 +71,26 @@ const Toolbar = {
       uploadBtn.innerHTML = '<span class="upload-icon">&#9654;</span> Upload & Run';
       // Re-enable if robot still connected
       if (this.robotPort) uploadBtn.disabled = false;
+    }
+  },
+
+  undoCode() {
+    if (!window.codeEditor) return;
+    const history = window._codeHistory;
+    if (history && history.length > 0) {
+      // Pop the last major checkpoint and restore it
+      const prev = history.pop();
+      window._blockCompilerUpdating = true;
+      window.codeEditor.setValue(prev);
+      window._blockCompilerUpdating = false;
+      window.aiCodeActive = false;
+      this.setStatus('Undo successful.');
+    } else {
+      // Fall back to Monaco's built-in undo for user-typed changes
+      if (window.codeEditor.trigger) {
+        window.codeEditor.trigger('keyboard', 'undo', null);
+      }
+      this.setStatus('Nothing to undo.');
     }
   },
 

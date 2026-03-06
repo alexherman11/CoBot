@@ -23,12 +23,11 @@
     // Check for API key on first launch
     const hasKey = await window.api.hasApiKey();
     if (!hasKey) {
-      // Try to load from OPENAI_API_KEY.txt (migration from old setup)
       // If no key, show settings dialog
       setTimeout(() => {
         Toolbar.showSettings();
         document.getElementById('status-message').textContent =
-          'Welcome! Please enter your OpenAI API key to use AI Chat.';
+          'Welcome! Please enter your Anthropic API key to use AI Chat.';
       }, 1000);
     }
 

@@ -8,7 +8,7 @@ let vexcomService = null;
 
 function getOpenAI() {
   if (!openaiService) {
-    const key = store.get('openai-api-key');
+    const key = store.get('anthropic-api-key');
     if (key) {
       openaiService = new OpenAIService(key);
     }
@@ -45,7 +45,7 @@ function registerIpcHandlers(ipcMain) {
   // Chat (non-streaming)
   ipcMain.handle('send-chat-message', async (_event, messages) => {
     const ai = getOpenAI();
-    if (!ai) return { error: 'No API key set. Please add your OpenAI API key in Settings.' };
+    if (!ai) return { error: 'No API key set. Please add your Anthropic API key in Settings.' };
     try {
       return await ai.sendMessage(messages);
     } catch (err) {
@@ -65,23 +65,24 @@ function registerIpcHandlers(ipcMain) {
         event.sender.send(channel, chunk);
       });
     } catch (err) {
+      console.error('[chat stream error]', err.message);
       event.sender.send(channel, { done: true, error: err.message });
     }
   });
 
   // API key management
   ipcMain.handle('get-api-key', () => {
-    return store.get('openai-api-key', '');
+    return store.get('anthropic-api-key', '');
   });
 
   ipcMain.handle('set-api-key', (_event, key) => {
-    store.set('openai-api-key', key);
+    store.set('anthropic-api-key', key);
     openaiService = null; // Reset so next call uses new key
     return { success: true };
   });
 
   ipcMain.handle('has-api-key', () => {
-    return !!store.get('openai-api-key');
+    return !!store.get('anthropic-api-key');
   });
 
   // Start periodic robot scanning

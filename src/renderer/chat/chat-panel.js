@@ -45,7 +45,11 @@ const ChatPanel = {
       btn.addEventListener('click', () => {
         const code = btn.dataset.code;
         if (window.codeEditor) {
+          if (typeof BlockCompiler !== 'undefined') BlockCompiler._pushHistory();
+          window._aiCodeLoading = true;
           window.codeEditor.setValue(code);
+          window._aiCodeLoading = false;
+          window.aiCodeActive = true;
         }
         document.getElementById('status-message').textContent = 'Code loaded into editor!';
       });
@@ -77,7 +81,11 @@ const ChatPanel = {
       btn.addEventListener('click', () => {
         const code = btn.dataset.code;
         if (window.codeEditor) {
+          if (typeof BlockCompiler !== 'undefined') BlockCompiler._pushHistory();
+          window._aiCodeLoading = true;
           window.codeEditor.setValue(code);
+          window._aiCodeLoading = false;
+          window.aiCodeActive = true;
         }
         document.getElementById('status-message').textContent = 'Code loaded into editor!';
       });
@@ -86,11 +94,23 @@ const ChatPanel = {
     this.scrollToBottom();
   },
 
-  addErrorMessage(text) {
+  addErrorMessage(text, retryable = false) {
     const messagesEl = document.getElementById('chat-messages');
     const msg = document.createElement('div');
     msg.className = 'chat-message error';
     msg.textContent = text;
+
+    if (retryable) {
+      const retryBtn = document.createElement('button');
+      retryBtn.className = 'btn-retry';
+      retryBtn.textContent = 'Try Again';
+      retryBtn.addEventListener('click', () => {
+        msg.remove();
+        ChatController.retryLastMessage();
+      });
+      msg.appendChild(retryBtn);
+    }
+
     messagesEl.appendChild(msg);
     this.scrollToBottom();
   },

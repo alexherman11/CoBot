@@ -8,6 +8,101 @@
   display: flex;
 }
 
+/* Chat header with reset button */
+#chat-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border);
+  background: #f9fafb;
+}
+
+#chat-reset-btn {
+  padding: 4px 12px;
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+#chat-reset-btn:hover {
+  background: #fde8e8;
+  color: var(--accent-red);
+  border-color: var(--accent-red);
+}
+
+/* Reset confirmation modal */
+.reset-modal-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.reset-modal {
+  background: white;
+  border-radius: 10px;
+  padding: 20px 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  text-align: center;
+}
+
+.reset-modal p {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+}
+
+.reset-modal-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.reset-modal-buttons button {
+  padding: 6px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-reset-yes {
+  background: var(--accent-red);
+  color: white;
+}
+
+.btn-reset-yes:hover {
+  opacity: 0.85;
+}
+
+.btn-reset-no {
+  background: var(--accent);
+  color: white;
+}
+
+.btn-reset-no:hover {
+  opacity: 0.85;
+}
+
+.btn-reset-cancel {
+  background: #e5e7eb;
+  color: var(--text-primary);
+}
+
+.btn-reset-cancel:hover {
+  background: #d1d5db;
+}
+
 #chat-messages {
   flex: 1;
   overflow-y: auto;
@@ -52,6 +147,24 @@
   background: #fde8e8;
   color: var(--accent-red);
   font-size: 13px;
+}
+
+.btn-retry {
+  display: block;
+  margin: 8px auto 0;
+  padding: 4px 14px;
+  background: var(--accent-red);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-retry:hover {
+  opacity: 0.85;
 }
 
 /* Code blocks within chat messages */

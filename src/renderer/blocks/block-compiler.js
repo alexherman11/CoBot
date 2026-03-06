@@ -12,7 +12,26 @@ const BlockCompiler = {
 
     // Update the Monaco editor
     if (window.codeEditor) {
+      if (window.aiCodeActive) {
+        const confirmed = confirm('Your AI-generated code will be overwritten by the blocks. Continue?');
+        if (!confirmed) return;
+        window.aiCodeActive = false;
+      }
+      BlockCompiler._pushHistory();
+      window._blockCompilerUpdating = true;
       window.codeEditor.setValue(code);
+      window._blockCompilerUpdating = false;
+    }
+  },
+
+  _pushHistory() {
+    if (!window.codeEditor) return;
+    const current = window.codeEditor.getValue();
+    if (!window._codeHistory) window._codeHistory = [];
+    const last = window._codeHistory[window._codeHistory.length - 1];
+    if (current !== last) {
+      window._codeHistory.push(current);
+      if (window._codeHistory.length > 50) window._codeHistory.shift();
     }
   },
 
